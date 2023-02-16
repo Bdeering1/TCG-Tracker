@@ -1,0 +1,14 @@
+# Buid Output
+build/
+
+# Dependencies
+node_modules/
+
+# VS Code
+.vscode/
+
+# MacOS
+.DS_Store
+
+# Dev Reference
+dev/
