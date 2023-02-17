@@ -1,0 +1,59 @@
+env:
+  browser: true
+  es2021: true
+extends:
+  - eslint:recommended
+  - plugin:@typescript-eslint/recommended
+parser: '@typescript-eslint/parser'
+parserOptions:
+  ecmaVersion: latest
+  sourceType: module
+plugins:
+  - '@typescript-eslint'
+rules:
+  arrow-parens:
+    - warn
+    - as-needed
+  default-case-last: error
+  default-param-last: error
+  dot-location:
+    - warn
+    - property
+  eqeqeq: warn
+  func-names:
+    - error
+    - as-needed
+  indent:
+    - error
+    - 4
+    - SwitchCase: 1
+  linebreak-style:
+    - error
+    - unix
+  new-parens: warn
+  no-constructor-return: error
+  no-magic-numbers:
+    - warn
+    - ignore: [0,1]
+      ignoreDefaultValues: true
+      ignoreClassFieldInitialValues: true
+  no-shadow: warn
+  no-void: error
+  no-whitespace-before-property: warn
+  object-shorthand:
+    - warn
+    - consistent-as-needed
+  operator-assignment: warn
+  prefer-object-has-own: warn
+  prefer-object-spread: warn
+  prefer-promise-reject-errors: error
+  prefer-template: warn
+  quotes:
+    - warn
+    - double
+  require-await: warn
+  semi:
+    - warn
+    - always
+  switch-colon-spacing: warn
+  yoda: warn
