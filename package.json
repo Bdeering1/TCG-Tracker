@@ -9,7 +9,7 @@
     "dev": "tsc -watch",
     "build": "tsc --build --force",
     "clean": "tsc --build --clean",
-    "start": "tsc --build && node --es-module-specifier-resolution=node ."
+    "start": "node --es-module-specifier-resolution=node ."
   },
   "repository": {
     "type": "git",

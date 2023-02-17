@@ -9,6 +9,3 @@ node_modules/
 
 # MacOS
 .DS_Store
-
-# Dev Reference
-dev/

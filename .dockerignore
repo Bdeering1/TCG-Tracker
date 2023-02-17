@@ -1,0 +1,17 @@
+# Build
+build
+
+# Dependencies
+node_modules
+
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+docker-compose.yaml
+
+# Other
+.eslint.*
+**/*.md

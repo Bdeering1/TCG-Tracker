@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+  tcg-mongo:
+    image: mongo:6
+
+    ports: 
+      - "27017:27017"
+
+    volumes:
+      - data:/data/db
+    
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=example
+      - MONGO_INITDB_DATABASE=task-management
+    
+    container_name: tcg-mongo
+
+  tcg-tracker:
+    build:
+      context: .
+      target: builder
+
+    container_name: tcg-tracker
+    image: tcg-tracker:latest
+
+    ports:
+      - "8080:8080"
+
+    environment:
+      - MONGO_USERNAME=root
+      - MONGO_PASSWORD=example
+      - MONGO_HOSTNAME=host.docker.internal
+      - MONGO_PORT=27017
+      - MONGO_DATABASE_NAME=task-management
+
+    stdin_open: true
+    tty: true
+
+    depends_on:
+      - tcg-mongo
+
+volumes:
+  data:
+
+# docker compose up -d --build
+# docker attach tcg-tracker
