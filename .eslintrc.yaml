@@ -48,9 +48,6 @@ rules:
   prefer-object-spread: warn
   prefer-promise-reject-errors: error
   prefer-template: warn
-  quotes:
-    - warn
-    - double
   require-await: warn
   semi:
     - warn
