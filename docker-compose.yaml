@@ -13,14 +13,13 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=example
-      - MONGO_INITDB_DATABASE=task-management
+      - MONGO_INITDB_DATABASE=tcg-tracker
     
     container_name: tcg-mongo
 
   tcg-tracker:
     build:
       context: .
-      target: builder
 
     container_name: tcg-tracker
     image: tcg-tracker:latest
@@ -33,7 +32,7 @@ services:
       - MONGO_PASSWORD=example
       - MONGO_HOSTNAME=host.docker.internal
       - MONGO_PORT=27017
-      - MONGO_DATABASE_NAME=task-management
+      - MONGO_DATABASE_NAME=tcg-tracker
 
     stdin_open: true
     tty: true
