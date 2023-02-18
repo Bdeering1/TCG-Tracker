@@ -1,6 +1,7 @@
 import express from 'express';
 import { connect, CallbackError } from 'mongoose';
 import { ICard } from './models/card';
+import { addCard, findCard } from './repositories/card-repo';
 import { getLatestPrices, update } from './repositories/price-record-repo';
 
 const HTTP_OK = 200;
@@ -34,6 +35,11 @@ const card: ICard = {
     type: 'Pokemon',
     path: 'game/pokemon-base-set-2/charizard-4'
 };
+
+const res = await addCard(card);
+if (res.success) console.log('Card added');
+else console.log(res.message);
+console.log((await findCard(card.name))?.name ?? 'Card not found');
 
 await update(card);
 console.log(await getLatestPrices(card));

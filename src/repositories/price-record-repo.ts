@@ -1,23 +1,24 @@
-import { CallbackError, Document } from "mongoose";
 import { ICard } from "../models/card";
-import PriceRecord, { IPriceRecord } from "../models/price-record";
+import PriceRecord from "../models/price-record";
 import { getPriceRecord } from "../scrape-data";
+import { Response } from "../types";
 
 const MS_PER_WEEK = 604_800_000;
 
-export async function update(card: ICard) {
+export async function update(card: ICard): Promise<Response<void>> {
     const recentRecords = await PriceRecord.$where(`this.date > new Date() - ${MS_PER_WEEK}`).find({ name: card.name });
     if (recentRecords.length === 0) {
-        const record = await getPriceRecord(card) as Document<unknown, any, IPriceRecord> & IPriceRecord;
+        const document = new PriceRecord(await getPriceRecord(card));
 
-        record.save((err: CallbackError) => {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log('Successfully saved price record to DB');
-            }
-        });
+        try {
+            document.save();
+            return { success: true };
+        }
+        catch (err) {
+            return { success: false, message: `${err}` };
+        }
     }
+    return { success: true, message: 'Price record up to date' };
 }
 
 export async function getLatestPrices(card: ICard) {

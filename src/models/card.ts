@@ -15,6 +15,7 @@ export const CardSchema = new Schema<ICard>({
     name: {
         type: String,
         required: true,
+        unique: true,
     },
     type: {
         type: String,
