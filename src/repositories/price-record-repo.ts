@@ -15,7 +15,7 @@ export async function update(card: ICard): Promise<Response<void>> {
             return { success: true };
         }
         catch (err) {
-            return { success: false, message: `${err}` };
+            return { success: false, message: `Failed to update price for ${card.name}:\n ${err}` };
         }
     }
     return { success: true, message: 'Price record up to date' };
