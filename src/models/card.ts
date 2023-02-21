@@ -11,6 +11,10 @@ export interface ICard {
     notes?: string;
 }
 
+export function cardToString(card: ICard): string {
+    return `${card.name} ${card.notes ? `(- ${card.notes})` : ''}`;
+}
+
 export const CardSchema = new Schema<ICard>({
     name: {
         type: String,
@@ -21,6 +25,10 @@ export const CardSchema = new Schema<ICard>({
         type: String,
         required: true,
         enum: [ 'Pokemon', 'YuGiOh' ],
+    },
+    path: {
+        type: String,
+        required: true,
     },
     graded: {
         type: String,

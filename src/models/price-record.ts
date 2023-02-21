@@ -21,6 +21,10 @@ export interface IPriceRecord {
     grade10?: IGrade;
 }
 
+export function priceToString(pr: IPriceRecord): string {
+    return `${pr.name} - $${pr.ungraded.price} ungraded`;
+}
+
 export const PriceRecordSchema = new Schema<IPriceRecord>({
     name: {
         type: String,
