@@ -4,7 +4,7 @@ import { IPriceRecord } from "./models/price-record";
 
 const ROOT_URL = 'https://www.pricecharting.com/';
 
-export async function getPriceRecord(card: ICard): Promise<IPriceRecord> {
+export async function scrapePriceRecord(card: ICard): Promise<IPriceRecord> {
     const res = await fetch(`${ROOT_URL}${card.path}`);
     const html = await res.text();
     const $ = cheerio.load(html);

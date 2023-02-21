@@ -4,15 +4,19 @@ export interface ICard {
     name: string;
     type: string;
     path: string;
+    expectedPrice?: number;
     graded?: string;
     sold?: boolean;
-    highestGrade?: number;
-    lowestGrade?: number;
+    grade?: number;
     notes?: string;
 }
 
 export function cardToString(card: ICard): string {
-    return `${card.name} ${card.notes ? `(- ${card.notes})` : ''}`;
+    const name = card.name;
+    const expectedPrice = card.expectedPrice ? `: ~$${card.expectedPrice}` : '';
+    const notes = card.notes ? `(${card.notes})` : '';
+
+    return `${name}${expectedPrice} ${notes}`;
 }
 
 export const CardSchema = new Schema<ICard>({
@@ -30,6 +34,10 @@ export const CardSchema = new Schema<ICard>({
         type: String,
         required: true,
     },
+    expectedPrice: {
+        type: Number,
+        min: 0,
+    },
     graded: {
         type: String,
         required: true,
@@ -41,12 +49,7 @@ export const CardSchema = new Schema<ICard>({
         require: true,
         default: false,
     },
-    highestGrade: {
-        type: Number,
-        min: 0,
-        max: 10,
-    },
-    lowestGrade: {
+    grade: {
         type: Number,
         min: 0,
         max: 10,

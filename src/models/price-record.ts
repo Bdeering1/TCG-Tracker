@@ -22,7 +22,10 @@ export interface IPriceRecord {
 }
 
 export function priceToString(pr: IPriceRecord): string {
-    return `${pr.name} - $${pr.ungraded.price} ungraded`;
+    const grade7 = pr.grade7 ? `, 7: $${pr.grade7.price}` : '';
+    const grade8 = pr.grade8 ? `, 8: $${pr.grade8.price}` : '';
+    const grade9 = pr.grade9 ? `, 9: $${pr.grade9.price}` : '';
+    return `${pr.name} { ungraded: $${pr.ungraded.price}${grade7}${grade8}${grade9} }`;
 }
 
 export const PriceRecordSchema = new Schema<IPriceRecord>({

@@ -1,18 +1,19 @@
 import { ICard } from "../models/card";
-import PriceRecord from "../models/price-record";
-import { getPriceRecord } from "../scrape-data";
+import PriceRecord, { IPriceRecord } from "../models/price-record";
+import { scrapePriceRecord } from "../scrape-data";
 import { Response } from "../types";
 
 const MS_PER_WEEK = 604_800_000;
 
-export async function update(card: ICard): Promise<Response<void>> {
+export async function updatePrice(card: ICard): Promise<Response<IPriceRecord>> {
     const recentRecords = await PriceRecord.$where(`this.date > new Date() - ${MS_PER_WEEK}`).find({ name: card.name });
     if (recentRecords.length === 0) {
-        const document = new PriceRecord(await getPriceRecord(card));
+        const record = await scrapePriceRecord(card);
+        const document = new PriceRecord(record);
 
         try {
             document.save();
-            return { success: true };
+            return { data: record, success: true };
         }
         catch (err) {
             return { success: false, message: `Failed to update price for ${card.name}:\n ${err}` };

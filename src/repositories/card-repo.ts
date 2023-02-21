@@ -25,6 +25,17 @@ export async function addCard(card: ICard): Promise<Response<void>> {
     }
 }
 
+export async function updateCard(card: ICard): Promise<Response<void>> {
+    const document = new Card(card);
+    try {
+        await document.updateOne(card);
+        return { success: true };
+    }
+    catch (err) {
+        return { success: false, message: `${err}` };
+    }
+}
+
 export async function removeCard(card: ICard) {
     return await Card.deleteOne((doc: CardDocument) => doc.name === card.name);
 }

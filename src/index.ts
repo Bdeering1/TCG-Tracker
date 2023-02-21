@@ -1,9 +1,9 @@
 import express from 'express';
-import { connect, CallbackError } from 'mongoose';
+import mongoose, { connect, CallbackError } from 'mongoose';
 import { ICard, cardToString } from './models/card';
 import { Option } from './types';
-import { addCard, findCard, findCards, getAllCards } from './repositories/card-repo';
-import { getLatestPrices, update } from './repositories/price-record-repo';
+import { addCard, findCard, findCards, getAllCards, updateCard } from './repositories/card-repo';
+import { getLatestPrices, updatePrice } from './repositories/price-record-repo';
 import bodyParser from 'body-parser';
 import { IPriceRecord, priceToString } from './models/price-record';
 
@@ -22,7 +22,7 @@ const MONGO_DATABASE_NAME = process.env.MONGO_DATABASE_NAME;
 if (MONGO_USERNAME && MONGO_PASSWORD && MONGO_HOSTNAME && MONGO_PORT) {
     const mongoUri = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DATABASE_NAME}?authSource=admin`;
 
-    // /mongoose.set('strictQuery', true);
+    mongoose.set('strictQuery', true);
     connect(mongoUri, (err: CallbackError) => {
         if (err) {
             console.log(err);
@@ -77,7 +77,10 @@ app.post('/card', async (req, res) => {
     const card = req.body as ICard;
     const status = await addCard(card);
     if (status.success) res.status(HTTP_OK).send(`Successfully added card ${card.name}`);
-    else res.status(HTTP_ERROR).send(`Failed to add card`);
+    else {
+        res.status(HTTP_ERROR).send(`Failed to add card`);
+        console.log(status.message);
+    }
 });
 
 app.get('/price/:name', async (req, res) => {
@@ -116,13 +119,48 @@ async function updateAll(): Promise<boolean> {
     let allSuccess = true;
     const allCards = await getAllCards();
     for (const card of allCards) {
-        console.log(card.name);
-        const res = await update(card);
-        if (!res.success) {
-            console.log(res.message);
+        console.log(`updating ${card.name}`);
+        const priceRes = await updatePrice(card);
+        if (!priceRes.success) {
+            console.log(priceRes.message);
+            allSuccess = false;
+            continue;
+        }
+        if (priceRes.data === undefined) continue;
+        if (card.graded === 'Graded') {
+            switch (roundGrade(card.grade as number)) {
+                case 7:
+                    card.expectedPrice = priceRes.data.grade7?.price;
+                    break;
+                case 8:
+                    card.expectedPrice = priceRes.data.grade8?.price;
+                    break;
+                case 9:
+                    card.expectedPrice = priceRes.data.grade9?.price;
+                    break;
+                case 9.5:
+                    card.expectedPrice = priceRes.data.grade9_5?.price;
+                    break;
+                case 10:
+                    card.expectedPrice = priceRes.data.grade10?.price;
+                    break;
+                default:
+                    card.expectedPrice;
+                    break;
+            }
+        }
+        if (!card.expectedPrice) card.expectedPrice = priceRes.data.ungraded.price;
+        const cardRes = await updateCard(card);
+        if (!cardRes.success) {
+            console.log(cardRes.message);
             allSuccess = false;
         }
     }
     if (allSuccess) console.log('Successfully updated all cards');
     return allSuccess;
+}
+
+function roundGrade(grade: number) {
+    if (grade === 9.5) return 9.5;
+    else return Math.round(grade);
 }
