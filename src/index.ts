@@ -7,6 +7,7 @@ import { getLatestPrices, updatePrice } from './repositories/price-record-repo';
 import bodyParser from 'body-parser';
 import { IPriceRecord, priceToString } from './models/price-record';
 
+
 const HTTP_OK = 200;
 const HTTP_ERROR = 500;
 const HTTP_NOT_FOUND = 404;
@@ -17,6 +18,9 @@ const MONGO_PASSWORD = process.env.MONGO_PASSWORD;
 const MONGO_HOSTNAME = process.env.MONGO_HOSTNAME;
 const MONGO_PORT = process.env.MONGO_PORT;
 const MONGO_DATABASE_NAME = process.env.MONGO_DATABASE_NAME;
+
+console.log(process.env.MONGO_USERNAME);
+console.log(process.env.MONGO_PASSWORD);
 
 
 if (MONGO_USERNAME && MONGO_PASSWORD && MONGO_HOSTNAME && MONGO_PORT) {
