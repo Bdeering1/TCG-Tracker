@@ -23,7 +23,7 @@ export const CardSchema = new Schema<ICard>({
     name: {
         type: String,
         required: true,
-        unique: true,
+        unique: false,
     },
     type: {
         type: String,
@@ -51,8 +51,10 @@ export const CardSchema = new Schema<ICard>({
     },
     grade: {
         type: Number,
+        required: true,
         min: 0,
         max: 10,
+        default: 0,
     },
     notes: {
         type: String,

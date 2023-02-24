@@ -3,7 +3,7 @@ import express from 'express';
 import mongoose, { connect, CallbackError } from 'mongoose';
 import { ICard, cardToString } from './models/card';
 import { Option } from './types';
-import { addCard, findCard, findCards, getAllCards } from './repositories/card-repo';
+import { addCard, findCard, findCards, getAllCards, removeCard, removeCards, updateCard } from './repositories/card-repo';
 import { getLatestPrices, updateAllPrices } from './repositories/price-record-repo';
 import { IPriceRecord, priceToString } from './models/price-record';
 
@@ -71,7 +71,7 @@ app.get('/cards/:name', async (req, res) => {
     if (cards && req.query.format === 'string') {
         cards.forEach((card, index) => cards[ index ] = cardToString(card as ICard));
     }
-    if (cards && cards.length !== 0) res.status(HTTP_OK).send(cards);
+    if (cards.length > 0) res.status(HTTP_OK).send(cards);
     else res.status(HTTP_NOT_FOUND).send(`No cards found`);
 });
 app.post('/card', async (req, res) => {
@@ -80,6 +80,33 @@ app.post('/card', async (req, res) => {
     if (status.success) res.status(HTTP_OK).send(`Successfully added card ${card.name}`);
     else {
         res.status(HTTP_ERROR).send(`Failed to add card`);
+        console.log(status.message);
+    }
+});
+app.patch('/card', async (req, res) => {
+    const card = req.body as ICard;
+    const status = await updateCard(card);
+    if (status.success) res.status(HTTP_OK).send(`Successfully updated card ${card.name}`);
+    else {
+        res.status(HTTP_ERROR).send(`Failed to update card`);
+        console.log(status.message);
+    }
+});
+app.delete('/card', async (req, res) => {
+    const card = req.body as ICard;
+    const status = await removeCard(card);
+    if (status.success) res.status(HTTP_OK).send(`Successfully deleted card ${card.name}`);
+    else {
+        res.status(HTTP_ERROR).send(`Failed to delete card`);
+        console.log(status.message);
+    }
+});
+app.delete('/cards', async (req, res) => {
+    const card = req.body as ICard;
+    const status = await removeCards(card);
+    if (status.success) res.status(HTTP_OK).send(status.message);
+    else {
+        res.status(HTTP_ERROR).send(`Failed to delete cards`);
         console.log(status.message);
     }
 });
@@ -104,7 +131,7 @@ app.get('/prices', async (req, res) => {
     if (allPrices.length > 0) res.status(HTTP_OK).send(allPrices);
     else res.status(HTTP_NOT_FOUND).send(`No prices found`);
 });
-app.post('/update-all', async (_, res) => {
+app.post('/update-prices', async (_, res) => {
     const success = await updateAllPrices();
     if (success) res.status(HTTP_OK).send('Successfully updated all cards');
     else res.status(HTTP_ERROR).send('Failed to update all cards');

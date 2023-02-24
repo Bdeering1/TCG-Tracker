@@ -56,7 +56,6 @@ export async function updateAllPrices(): Promise<boolean> {
                     card.expectedPrice = priceRes.data.grade10?.price;
                     break;
                 default:
-                    card.expectedPrice;
                     break;
             }
         }
