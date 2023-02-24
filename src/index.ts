@@ -3,7 +3,7 @@ import express from 'express';
 import mongoose, { connect, CallbackError } from 'mongoose';
 import { ICard, cardToString } from './models/card';
 import { Option } from './types';
-import { addCard, findCard, findCards, getAllCards, removeCard, removeCards, updateCard } from './repositories/card-repo';
+import { addCard, findCard, findCards, getAllCards, removeCard, removeCards, updateAllCards, updateCard } from './repositories/card-repo';
 import { getLatestPrices, updateAllPrices } from './repositories/price-record-repo';
 import { IPriceRecord, priceToString } from './models/price-record';
 
@@ -77,7 +77,7 @@ app.get('/cards/:name', async (req, res) => {
 app.post('/card', async (req, res) => {
     const card = req.body as ICard;
     const status = await addCard(card);
-    if (status.success) res.status(HTTP_OK).send(`Successfully added card ${card.name}`);
+    if (status.success) res.status(HTTP_OK).send(status.message);
     else {
         res.status(HTTP_ERROR).send(`Failed to add card`);
         console.log(status.message);
@@ -86,16 +86,26 @@ app.post('/card', async (req, res) => {
 app.patch('/card', async (req, res) => {
     const card = req.body as ICard;
     const status = await updateCard(card);
-    if (status.success) res.status(HTTP_OK).send(`Successfully updated card ${card.name}`);
+    if (status.success) res.status(HTTP_OK).send(status.message);
     else {
         res.status(HTTP_ERROR).send(`Failed to update card`);
         console.log(status.message);
     }
 });
+app.patch('/cards', async (req, res) => {
+    const card = req.body as ICard;
+    const status = await updateAllCards(card);
+    if (status.success) res.status(HTTP_OK).send(status.message);
+    else {
+        res.status(HTTP_ERROR).send(`Failed to update cards`);
+        console.log(status.message);
+    }
+});
+
 app.delete('/card', async (req, res) => {
     const card = req.body as ICard;
     const status = await removeCard(card);
-    if (status.success) res.status(HTTP_OK).send(`Successfully deleted card ${card.name}`);
+    if (status.success) res.status(HTTP_OK).send(status.message);
     else {
         res.status(HTTP_ERROR).send(`Failed to delete card`);
         console.log(status.message);

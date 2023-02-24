@@ -28,7 +28,7 @@ export const CardSchema = new Schema<ICard>({
     type: {
         type: String,
         required: true,
-        enum: [ 'pokemon', 'yugioh' ],
+        enum: [ 'pokemon', 'yugioh', 'dummy' ],
     },
     path: {
         type: String,
