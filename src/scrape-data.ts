@@ -21,7 +21,9 @@ export async function scrapePriceRecord(card: ICard): Promise<IPriceRecord> {
 }
 
 function getPrice($: cheerio.Root, id: string): number {
-    return parseFloat($(`#${id} > .price:first`).text().replace(/[$,]/g, ''));
+    const price = parseFloat($(`#${id} > .price:first`).text().replace(/[$,]/g, ''));
+    if (isNaN(price)) return 0;
+    return price;
 }
 
 function getVolume($: cheerio.Root, specifier: string): string {

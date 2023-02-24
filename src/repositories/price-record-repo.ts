@@ -38,7 +38,7 @@ export async function updateAllPrices(): Promise<boolean> {
             continue;
         }
         if (priceRes.data === undefined) continue;
-        if (card.graded === 'Graded') {
+        if (card.graded === 'graded') {
             switch (roundGrade(card.grade as number)) {
                 case 7:
                     card.expectedPrice = priceRes.data.grade7?.price;

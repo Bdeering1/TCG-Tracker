@@ -46,7 +46,7 @@ export const PriceRecordSchema = new Schema<IPriceRecord>({
     grade9: Grade,
     grade9_5: Grade,
     grade10: Grade,
-});
+}, { versionKey: false });
 
 const PriceRecord = model('PriceRecord', PriceRecordSchema);
 export default PriceRecord;

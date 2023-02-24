@@ -14,9 +14,9 @@ export interface ICard {
 export function cardToString(card: ICard): string {
     const name = card.name;
     const expectedPrice = card.expectedPrice ? `: ~$${card.expectedPrice}` : '';
-    const notes = card.notes ? `(${card.notes})` : '';
+    const notes = card.notes ? ` (${card.notes})` : '';
 
-    return `${name}${expectedPrice} ${notes}`;
+    return `${name}${expectedPrice}${notes}`;
 }
 
 export const CardSchema = new Schema<ICard>({
@@ -28,7 +28,7 @@ export const CardSchema = new Schema<ICard>({
     type: {
         type: String,
         required: true,
-        enum: [ 'Pokemon', 'YuGiOh' ],
+        enum: [ 'pokemon', 'yugioh' ],
     },
     path: {
         type: String,
@@ -41,8 +41,8 @@ export const CardSchema = new Schema<ICard>({
     graded: {
         type: String,
         required: true,
-        enum: [ 'Ungraded', 'Pending', 'Graded' ],
-        default: 'Ungraded',
+        enum: [ 'ungraded', 'pending', 'graded' ],
+        default: 'ungraded',
     },
     sold: {
         type: Boolean,
@@ -57,7 +57,7 @@ export const CardSchema = new Schema<ICard>({
     notes: {
         type: String,
     },
-});
+}, { versionKey: false });
 
 const Card = model('Card', CardSchema);
 export default Card;
