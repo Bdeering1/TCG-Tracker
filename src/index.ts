@@ -1,10 +1,10 @@
+import bodyParser from 'body-parser';
 import express from 'express';
 import mongoose, { connect, CallbackError } from 'mongoose';
 import { ICard, cardToString } from './models/card';
 import { Option } from './types';
-import { addCard, findCard, findCards, getAllCards, updateCard } from './repositories/card-repo';
-import { getLatestPrices, updatePrice } from './repositories/price-record-repo';
-import bodyParser from 'body-parser';
+import { addCard, findCard, findCards, getAllCards } from './repositories/card-repo';
+import { getLatestPrices, updateAllPrices } from './repositories/price-record-repo';
 import { IPriceRecord, priceToString } from './models/price-record';
 
 
@@ -18,9 +18,6 @@ const MONGO_PASSWORD = process.env.MONGO_PASSWORD;
 const MONGO_HOSTNAME = process.env.MONGO_HOSTNAME;
 const MONGO_PORT = process.env.MONGO_PORT;
 const MONGO_DATABASE_NAME = process.env.MONGO_DATABASE_NAME;
-
-console.log(process.env.MONGO_USERNAME);
-console.log(process.env.MONGO_PASSWORD);
 
 
 if (MONGO_USERNAME && MONGO_PASSWORD && MONGO_HOSTNAME && MONGO_PORT) {
@@ -108,7 +105,7 @@ app.get('/prices', async (req, res) => {
     else res.status(HTTP_NOT_FOUND).send(`No prices found`);
 });
 app.post('/update-all', async (_, res) => {
-    const success = await updateAll();
+    const success = await updateAllPrices();
     if (success) res.status(HTTP_OK).send('Successfully updated all cards');
     else res.status(HTTP_ERROR).send('Failed to update all cards');
 });
@@ -117,54 +114,3 @@ const port = process.env.PORT || DEFAULT_PORT;
 app.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
 });
-
-
-async function updateAll(): Promise<boolean> {
-    let allSuccess = true;
-    const allCards = await getAllCards();
-    for (const card of allCards) {
-        console.log(`updating ${card.name}`);
-        const priceRes = await updatePrice(card);
-        if (!priceRes.success) {
-            console.log(priceRes.message);
-            allSuccess = false;
-            continue;
-        }
-        if (priceRes.data === undefined) continue;
-        if (card.graded === 'Graded') {
-            switch (roundGrade(card.grade as number)) {
-                case 7:
-                    card.expectedPrice = priceRes.data.grade7?.price;
-                    break;
-                case 8:
-                    card.expectedPrice = priceRes.data.grade8?.price;
-                    break;
-                case 9:
-                    card.expectedPrice = priceRes.data.grade9?.price;
-                    break;
-                case 9.5:
-                    card.expectedPrice = priceRes.data.grade9_5?.price;
-                    break;
-                case 10:
-                    card.expectedPrice = priceRes.data.grade10?.price;
-                    break;
-                default:
-                    card.expectedPrice;
-                    break;
-            }
-        }
-        if (!card.expectedPrice) card.expectedPrice = priceRes.data.ungraded.price;
-        const cardRes = await updateCard(card);
-        if (!cardRes.success) {
-            console.log(cardRes.message);
-            allSuccess = false;
-        }
-    }
-    if (allSuccess) console.log('Successfully updated all cards');
-    return allSuccess;
-}
-
-function roundGrade(grade: number) {
-    if (grade === 9.5) return 9.5;
-    else return Math.round(grade);
-}
