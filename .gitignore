@@ -2,7 +2,7 @@
 build/
 
 # Secrets
-.env
+*.env
 
 # Dependencies
 node_modules/
