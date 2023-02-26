@@ -16,15 +16,18 @@ const DEFAULT_PORT = 8080;
 const MONGO_USERNAME = process.env.MONGO_USERNAME;
 const MONGO_PASSWORD = process.env.MONGO_PASSWORD;
 const MONGO_HOSTNAME = process.env.MONGO_HOSTNAME;
-const MONGO_PORT = process.env.MONGO_PORT;
+const MONGO_PORT = process.env.MONGO_PORT ? `:${process.env.MONGO_PORT}` : '';
 const MONGO_DATABASE_NAME = process.env.MONGO_DATABASE_NAME;
 
 
-if (MONGO_USERNAME && MONGO_PASSWORD && MONGO_HOSTNAME && MONGO_PORT) {
-    const mongoUri = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DATABASE_NAME}?authSource=admin`;
+if (MONGO_USERNAME && MONGO_PASSWORD && MONGO_HOSTNAME) {
+    const uri = `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}${MONGO_PORT}/${MONGO_DATABASE_NAME}`;
 
     mongoose.set('strictQuery', true);
-    connect(mongoUri, (err: CallbackError) => {
+    connect(uri, {
+        w: 'majority',
+        retryWrites: false
+    }, (err: CallbackError) => {
         if (err) {
             console.log(err);
         } else {

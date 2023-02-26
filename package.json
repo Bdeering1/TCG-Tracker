@@ -10,7 +10,7 @@
     "clean": "tsc --build --clean",
     "dev": "tsc --build && npm start",
     "dev-watch": "concurrently 'tsc -watch' 'nodemon --es-module-specifier-resolution=node .'",
-    "start": "node --es-module-specifier-resolution=node ."
+    "start": "node --es-module-specifier-resolution=node --stack-trace-limit=15 ."
   },
   "repository": {
     "type": "git",
