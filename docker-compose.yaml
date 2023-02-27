@@ -16,7 +16,7 @@ services:
     container_name: tcg-mongo
 
     profiles:
-      - local-dev
+      - dev
 
   tcg-tracker:
     build:
@@ -37,5 +37,5 @@ services:
 volumes:
   data:
 
-# docker compose up -d --build
+# docker compose --profile=dev up -d --build
 # docker attach tcg-tracker

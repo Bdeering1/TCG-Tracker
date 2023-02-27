@@ -10,6 +10,11 @@ parserOptions:
   sourceType: module
 plugins:
   - '@typescript-eslint'
+overrides:
+  - files: ['*.ts']
+    rules:
+      '@typescript-eslint/no-empty-function': warn
+      '@typescript-eslint/no-shadow': warn
 rules:
   arrow-parens:
     - warn
@@ -37,7 +42,6 @@ rules:
     - ignore: [0,1]
       ignoreDefaultValues: true
       ignoreClassFieldInitialValues: true
-  no-shadow: warn
   no-void: error
   no-whitespace-before-property: warn
   object-shorthand:

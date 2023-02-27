@@ -20,7 +20,7 @@ const MONGO_PORT = process.env.MONGO_PORT ? `:${process.env.MONGO_PORT}` : '';
 const MONGO_DATABASE_NAME = process.env.MONGO_DATABASE_NAME;
 
 
-if (MONGO_USERNAME && MONGO_PASSWORD && MONGO_HOSTNAME) {
+if (MONGO_USERNAME && MONGO_PASSWORD && MONGO_HOSTNAME && MONGO_DATABASE_NAME) {
     const uri = `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}${MONGO_PORT}/${MONGO_DATABASE_NAME}`;
 
     mongoose.set('strictQuery', true);
@@ -44,7 +44,7 @@ const app = express();
 app.use(bodyParser.json());
 
 app.get('/', (_, res) => {
-    res.status(HTTP_OK).send('Hello World!');
+    res.status(HTTP_OK).send('Welcome to the TCG Tracker API! Start by trying a GET from the /cards endpoint');
 });
 
 
