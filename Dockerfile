@@ -6,10 +6,10 @@ RUN npm install pnpm -g
 
 COPY package.json pnpm-lock.yaml ./
 
-RUN pnpm install --frozen-lockfile
+RUN pnpm install -D --frozen-lockfile
 COPY . .
 
-RUN npm run build
+RUN npm run build-prod
 
 
 FROM node:18-bullseye-slim

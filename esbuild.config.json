@@ -1,0 +1,10 @@
+{
+  "entry": "./src/index.ts",
+  "outfile": "./build/index.js",
+  "bundle": true,
+  "sourcemap": true,
+  "format": "esm",
+  "platform": "node",
+  "packages": "external",
+  "analyze": true
+}
