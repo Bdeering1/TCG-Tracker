@@ -15,12 +15,10 @@ services:
     
     container_name: tcg-mongo
 
-    profiles:
-      - dev
-
   tcg-tracker:
     build:
       context: .
+      dockerfile: Dockerfile.dev
 
     image: tcg-tracker:latest
     container_name: tcg-tracker
@@ -28,14 +26,16 @@ services:
     ports:
       - "8080:8080"
 
+    environment:
+      NODE_ENV: ${ENVIRON}
+
     env_file:
       - ${ENVIRON}.env
 
-    stdin_open: true
-    tty: true
+    depends_on:
+      - tcg-mongo
 
 volumes:
   data:
 
 # docker compose --profile=dev up -d --build
-# docker attach tcg-tracker

@@ -16,12 +16,16 @@ const DEFAULT_PORT = 8080;
 const MONGO_USERNAME = process.env.MONGO_USERNAME;
 const MONGO_PASSWORD = process.env.MONGO_PASSWORD;
 const MONGO_HOSTNAME = process.env.MONGO_HOSTNAME;
-const MONGO_PORT = process.env.MONGO_PORT ? `:${process.env.MONGO_PORT}` : '';
+const MONGO_PORT = process.env.MONGO_PORT;
 const MONGO_DATABASE_NAME = process.env.MONGO_DATABASE_NAME;
 
 
 if (MONGO_USERNAME && MONGO_PASSWORD && MONGO_HOSTNAME && MONGO_DATABASE_NAME) {
-    const uri = `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}${MONGO_PORT}/${MONGO_DATABASE_NAME}`;
+    const uri = process.env.NODE_ENV === 'prod'
+        ? `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}/${MONGO_DATABASE_NAME}`
+        : `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DATABASE_NAME}?authSource=admin`;
+
+    console.log(uri);
 
     mongoose.set('strictQuery', true);
     connect(uri, {
@@ -37,14 +41,15 @@ if (MONGO_USERNAME && MONGO_PASSWORD && MONGO_HOSTNAME && MONGO_DATABASE_NAME) {
 }
 else {
     console.log('MongoDB connection string missing or incomplete');
+    console.log(`Hostname: ${MONGO_HOSTNAME}`);
 }
 
 
 const app = express();
 app.use(bodyParser.json());
 
-app.get('/', (_, res) => {
-    res.status(HTTP_OK).send('Welcome to the TCG Tracker API! Start by trying a GET from the /cards endpoint');
+app.get('/', (req, res) => {
+    res.status(HTTP_OK).send('Welcome to the TCG Tracker API! Try starting with one of these endpoints: /cards, /prices');
 });
 
 
