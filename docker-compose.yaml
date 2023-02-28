@@ -9,9 +9,6 @@ services:
 
     volumes:
       - data:/data/db
-  
-    env_file:
-      - ${ENVIRON}.env
     
     container_name: tcg-mongo
 
@@ -28,9 +25,6 @@ services:
 
     environment:
       NODE_ENV: ${ENVIRON}
-
-    env_file:
-      - ${ENVIRON}.env
 
     depends_on:
       - tcg-mongo
