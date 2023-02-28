@@ -15,7 +15,7 @@ const DEFAULT_PORT = 8080;
 
 const MONGO_USERNAME = process.env.MONGO_USERNAME || 'root';
 const MONGO_PASSWORD = process.env.MONGO_PASSWORD || 'mongo-auth';
-const MONGO_HOSTNAME = process.env.MONGO_HOSTNAME || 'host.docker.internal';
+const MONGO_HOSTNAME = process.env.MONGO_HOSTNAME || 'localhost';
 const MONGO_DATABASE_NAME = process.env.MONGO_DATABASE_NAME || 'tcg-tracker';
 const MONGO_PORT = 27017;
 

@@ -9,8 +9,8 @@
     "build": "tsc --build --force --dry && esbuild $(esbuild-config)",
     "build-prod": "esbuild $(esbuild-config) --sources-content=false --minify",
     "clean": "rm -rf ./build",
-    "dev": "npm run build && npm start",
-    "dev-watch": "concurrently 'esbuild $(esbuild-config) --watch' 'nodemon --es-module-specifier-resolution=node .'",
+    "dev": "docker compose --profile=dev up -d && concurrently 'esbuild $(esbuild-config) --watch' 'nodemon --es-module-specifier-resolution=node .'",
+    "prod": "docker compose --profile=prod up",
     "start": "node --es-module-specifier-resolution=node --stack-trace-limit=15 ."
   },
   "repository": {

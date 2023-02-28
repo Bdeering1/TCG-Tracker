@@ -10,7 +10,7 @@ export async function getLatestPrices(card: ICard) {
     return await PriceRecord.findOne({ name: card.name }).sort({ date: -1 });
 }
 export async function updatePrice(card: ICard): Promise<Response<IPriceRecord>> {
-    const recentRecords = await PriceRecord.$where(`this.date > new Date() - ${MS_PER_WEEK}`).find({ name: card.name });
+    const recentRecords = await PriceRecord.find({ name: card.name, date: { $gt: Date.now() - MS_PER_WEEK } });
     if (recentRecords.length === 0) {
         const record = await scrapePriceRecord(card);
         const document = new PriceRecord(record);
