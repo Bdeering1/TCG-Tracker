@@ -10,7 +10,7 @@
     "build-prod": "esbuild $(esbuild-config) --sources-content=false --minify",
     "clean": "rm -rf ./build",
     "dev": "docker compose --profile=dev up -d && concurrently 'esbuild $(esbuild-config) --watch' 'nodemon --es-module-specifier-resolution=node .'",
-    "prod": "docker compose --profile=prod up",
+    "prod": "docker compose --profile=prod up --build",
     "start": "node --es-module-specifier-resolution=node --stack-trace-limit=15 ."
   },
   "repository": {

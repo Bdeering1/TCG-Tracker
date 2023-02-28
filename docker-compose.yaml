@@ -17,22 +17,6 @@ services:
     profiles:
       - dev
 
-  # tcg-tracker-dev:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile.dev
-
-  #   image: tcg-tracker:latest
-  #   container_name: tcg-tracker
-
-  #   ports:
-  #     - "8080:8080"
-
-  #   depends_on: tcg-mongo
-
-  #   profiles:
-  #     - dev
-
   tcg-tracker:
     build:
       context: .
