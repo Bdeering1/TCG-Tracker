@@ -12,25 +12,12 @@ services:
     
     container_name: tcg-mongo
 
-    env_file: .env
-
-    profiles:
-      - dev
-
   tcg-tracker:
     build:
       context: .
 
-    image: tcg-tracker:latest
-    container_name: tcg-tracker
-
     ports:
       - "8080:8080"
-
-    env_file: .env
-
-    profiles:
-      - prod
 
 volumes:
   data:
