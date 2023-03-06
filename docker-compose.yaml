@@ -12,15 +12,19 @@ services:
     
     container_name: tcg-mongo
 
+    env_file: .env
+
   tcg-tracker:
     build:
       context: .
 
+    image: tcg-tracker:latest
+    container_name: tcg-tracker
+
     ports:
       - "8080:8080"
 
+    env_file: .env
+
 volumes:
   data:
-
-# docker compose --profile=X up --build
-# docker compose --profile=X down

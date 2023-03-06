@@ -20,10 +20,14 @@ const MONGO_DATABASE_NAME = process.env.MONGO_DATABASE_NAME || 'tcg-tracker';
 const MONGO_PORT = 27017;
 
 
+console.log(`Starting API in ${process.env.NODE_ENV} mode`);
+
 if (MONGO_USERNAME && MONGO_PASSWORD && MONGO_HOSTNAME && MONGO_DATABASE_NAME) {
     const uri = process.env.NODE_ENV === 'prod'
         ? `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}/${MONGO_DATABASE_NAME}`
         : `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DATABASE_NAME}?authSource=admin`;
+
+    if (process.env.NODE_ENV === 'dev') console.log(uri);
 
     mongoose.set('strictQuery', true);
     connect(uri, {
