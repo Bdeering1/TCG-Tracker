@@ -14,9 +14,6 @@ services:
 
     env_file: .env
 
-    profiles:
-      - dev
-
   tcg-tracker:
     build:
       context: .
@@ -29,11 +26,5 @@ services:
 
     env_file: .env
 
-    profiles:
-      - prod
-
 volumes:
   data:
-
-# docker compose --profile=X up --build
-# docker compose --profile=X down
