@@ -34,7 +34,7 @@
 	// "shutdownAction": "none",
 
 	// Uncomment the next line to run commands after the container is created.
-	"postCreateCommand": "apt-get update && apt-get install git"
+	"postCreateCommand": "apt-get update -y && apt-get -y --no-install-recommends install git"
 
 	// Configure tool-specific properties.
 	// "customizations": {},

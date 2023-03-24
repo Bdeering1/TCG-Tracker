@@ -59,7 +59,7 @@ export async function updateAllPrices(): Promise<boolean> {
                     break;
             }
         }
-        if (!card.expectedPrice) card.expectedPrice = priceRes.data.ungraded.price;
+        else { card.expectedPrice = priceRes.data.ungraded.price; }
         const cardRes = await updateCard(card);
         if (!cardRes.success) {
             console.log(cardRes.message);
