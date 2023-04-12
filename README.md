@@ -1,3 +1,3 @@
 # TCG Tracker
 
-App for tracking TCG card prices
+Web service for tracking TCG prices.
